@@ -28,24 +28,24 @@ public class PaymentService {
     }
 
     public PaymentDto findById(Long id){
-        Payment payment = paymentRepository
+        Payment paymentModel = paymentRepository
                 .findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        return modelMapper.map(payment, PaymentDto.class);
+        return modelMapper.map(paymentModel, PaymentDto.class);
     }
 
     public PaymentDto create(PaymentDto payment){
         Payment paymentModel = modelMapper.map(payment, Payment.class);
         paymentModel.setPayStatus(PaymentStatus.CREATED);
         paymentRepository.save(paymentModel);
-        return modelMapper.map(payment, PaymentDto.class);
+        return modelMapper.map(paymentModel, PaymentDto.class);
     }
 
     public PaymentDto update(Long id, PaymentDto dto) {
-        Payment pagamento = modelMapper.map(dto, Payment.class);
-        pagamento.setId(id);
-        pagamento = paymentRepository.save(pagamento);
-        return modelMapper.map(pagamento, PaymentDto.class);
+        Payment paymentModel = modelMapper.map(dto, Payment.class);
+        paymentModel.setId(id);
+        paymentModel = paymentRepository.save(paymentModel);
+        return modelMapper.map(paymentModel, PaymentDto.class);
     }
 
     public void delete(Long id) {
