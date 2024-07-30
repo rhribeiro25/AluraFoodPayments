@@ -26,27 +26,27 @@ public class Payment {
 
     @NotNull
     @Positive
-    private BigDecimal value;
+    private BigDecimal payValue;
 
     @NotBlank
     @Size(max = 100)
-    private String name;
+    private String payName;
 
     @NotBlank
     @Size(max = 19)
-    private String number;
+    private String payNumber;
 
     @NotBlank
     @Size(max = 7)
-    private String expiration;
+    private String payExpiration;
 
     @NotBlank
     @Size(min = 3, max = 3)
-    private String code;
+    private String payCode;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    private PaymentStatus payStatus;
 
     @NotNull
     private Long orderId;

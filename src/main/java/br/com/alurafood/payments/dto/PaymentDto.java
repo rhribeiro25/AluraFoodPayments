@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 public class PaymentDto {
 
     private Long id;
-    private BigDecimal value;
-    private String name;
-    private String number;
-    private String expiration;
-    private String code;
-    private PaymentStatus status;
+    private BigDecimal payValue;
+    private String payName;
+    private String payNumber;
+    private String payExpiration;
+    private String payCode;
+    private PaymentStatus payStatus;
     private Long orderId;
     private Long paymentMethodId;
 
