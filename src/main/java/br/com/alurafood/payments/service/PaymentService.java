@@ -1,5 +1,6 @@
 package br.com.alurafood.payments.service;
 
+import br.com.alurafood.payments.client.OrderClient;
 import br.com.alurafood.payments.dto.PaymentDto;
 import br.com.alurafood.payments.model.Payment;
 import br.com.alurafood.payments.model.PaymentStatus;
@@ -12,11 +13,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private OrderClient orderClient;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -50,5 +56,17 @@ public class PaymentService {
 
     public void delete(Long id) {
         paymentRepository.deleteById(id);
+    }
+
+    public void paymentConfirmation(Long id){
+        Optional<Payment> payment = paymentRepository.findById(id);
+
+        if (payment.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+
+        payment.get().setPayStatus(PaymentStatus.CONFIRMED);
+        paymentRepository.save(payment.get());
+        orderClient.updatePayments(payment.get().getOrderId());
     }
 }
