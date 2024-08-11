@@ -4,6 +4,7 @@ import br.com.alurafood.payments.client.OrderClient;
 import br.com.alurafood.payments.dto.PaymentDto;
 import br.com.alurafood.payments.model.Payment;
 import br.com.alurafood.payments.model.PaymentStatus;
+import br.com.alurafood.payments.rabbitmq.PaymentsRabbitTemplate;
 import br.com.alurafood.payments.repository.PaymentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -27,6 +28,9 @@ public class PaymentService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PaymentsRabbitTemplate paymentsRabbitTemplate;
+
     public Page<PaymentDto> findAllByPage (Pageable pageable){
         return paymentRepository
                 .findAll(pageable)
@@ -44,7 +48,11 @@ public class PaymentService {
         Payment paymentModel = modelMapper.map(payment, Payment.class);
         paymentModel.setPayStatus(PaymentStatus.CREATED);
         paymentRepository.save(paymentModel);
-        return modelMapper.map(paymentModel, PaymentDto.class);
+        PaymentDto paymentDto = modelMapper.map(paymentModel, PaymentDto.class);
+
+        paymentsRabbitTemplate.sendPaymentToRabbitMQ(paymentDto);
+
+        return paymentDto;
     }
 
     public PaymentDto update(Long id, PaymentDto dto) {

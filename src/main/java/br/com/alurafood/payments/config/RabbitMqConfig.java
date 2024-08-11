@@ -1,7 +1,7 @@
 package br.com.alurafood.payments.config;
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,8 +15,10 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfig {
 
     @Bean
-    public Queue createQueue(){
-        return QueueBuilder.nonDurable("alurafood.payments.created").build();
+    public FanoutExchange paymentsFanoutExchange(){
+        return ExchangeBuilder
+                .fanoutExchange("payments.ex")
+                .build();
     }
 
     @Bean

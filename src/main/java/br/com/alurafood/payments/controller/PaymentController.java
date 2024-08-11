@@ -5,8 +5,6 @@ import br.com.alurafood.payments.service.PaymentService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +22,6 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
     @GetMapping
     public Page<PaymentDto> allByPage(@PageableDefault(size = 10) Pageable pageable) {
         return paymentService.findAllByPage(pageable);
@@ -42,8 +37,6 @@ public class PaymentController {
     public ResponseEntity<PaymentDto> add(@RequestBody @Valid PaymentDto dto, UriComponentsBuilder uriBuilder) {
         PaymentDto payment = paymentService.create(dto);
         URI uri = uriBuilder.path("/payments/{id}").buildAndExpand(payment.getId()).toUri();
-
-        rabbitTemplate.convertAndSend("alurafood.payments.created", payment);
         return ResponseEntity.created(uri).body(payment);
     }
 
