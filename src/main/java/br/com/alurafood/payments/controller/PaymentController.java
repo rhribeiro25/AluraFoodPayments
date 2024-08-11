@@ -43,8 +43,7 @@ public class PaymentController {
         PaymentDto payment = paymentService.create(dto);
         URI uri = uriBuilder.path("/payments/{id}").buildAndExpand(payment.getId()).toUri();
 
-        Message msg = new Message(("Created payment with ID: " + payment.getId()).getBytes());
-        rabbitTemplate.send("alurafood.payments.created", msg);
+        rabbitTemplate.convertAndSend("alurafood.payments.created", payment);
         return ResponseEntity.created(uri).body(payment);
     }
 
