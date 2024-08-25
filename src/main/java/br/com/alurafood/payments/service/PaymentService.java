@@ -50,7 +50,7 @@ public class PaymentService {
         paymentRepository.save(paymentModel);
         PaymentDto paymentDto = modelMapper.map(paymentModel, PaymentDto.class);
 
-        paymentsRabbitTemplate.sendPaymentToRabbitMQ(paymentDto);
+        paymentsRabbitTemplate.sendPaymentsCreated(paymentDto);
 
         return paymentDto;
     }
@@ -76,6 +76,18 @@ public class PaymentService {
         payment.get().setPayStatus(PaymentStatus.CONFIRMED);
         paymentRepository.save(payment.get());
         orderClient.updatePayments(payment.get().getOrderId());
+    }
+
+    public void paymentConfirmationV2(Long id){
+        Optional<Payment> payment = paymentRepository.findById(id);
+
+        if (payment.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+
+        payment.get().setPayStatus(PaymentStatus.CONFIRMED);
+        paymentRepository.save(payment.get());
+        paymentsRabbitTemplate.sendPaymentsConfirmed(modelMapper.map(payment, PaymentDto.class));
     }
 
     public void updateStatus(Long id) {

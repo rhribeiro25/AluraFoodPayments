@@ -11,8 +11,12 @@ public class PaymentsRabbitTemplate {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void sendPaymentToRabbitMQ(PaymentDto payment){
-        rabbitTemplate.convertAndSend("payments.ex", "", payment);
+    public void sendPaymentsCreated(PaymentDto payment){
+        rabbitTemplate.convertAndSend("payments.created.ex", "", payment);
+    }
+
+    public void sendPaymentsConfirmed(PaymentDto payment){
+        rabbitTemplate.convertAndSend("payments.confirmed.ex", "", payment);
     }
 
 }

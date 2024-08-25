@@ -16,8 +16,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/payments")
-public class PaymentController {
+@RequestMapping("/v1/payments")
+public class PaymentV1Controller {
 
     @Autowired
     private PaymentService paymentService;
