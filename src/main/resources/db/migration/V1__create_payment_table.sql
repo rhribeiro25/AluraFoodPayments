@@ -1,5 +1,5 @@
 CREATE TABLE payments (
- id bigint constraint pk_id_payment PRIMARY KEY,
+ id bigserial constraint pk_id_payment PRIMARY KEY,
  pay_value decimal(19,2) NOT NULL,
  pay_name varchar(100) DEFAULT NULL,
  pay_number varchar(19) DEFAULT NULL,
