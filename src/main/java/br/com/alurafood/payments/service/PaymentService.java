@@ -1,6 +1,5 @@
 package br.com.alurafood.payments.service;
 
-import br.com.alurafood.payments.client.OrderClient;
 import br.com.alurafood.payments.dto.PaymentDto;
 import br.com.alurafood.payments.model.Payment;
 import br.com.alurafood.payments.model.PaymentStatus;
@@ -21,9 +20,6 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
-
-    @Autowired
-    private OrderClient orderClient;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -75,7 +71,6 @@ public class PaymentService {
 
         payment.get().setPayStatus(PaymentStatus.CONFIRMED);
         paymentRepository.save(payment.get());
-        orderClient.updatePayments(payment.get().getOrderId());
     }
 
     public void paymentConfirmationV2(Long id){
