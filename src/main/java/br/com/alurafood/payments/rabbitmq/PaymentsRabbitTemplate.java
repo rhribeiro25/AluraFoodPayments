@@ -12,11 +12,11 @@ public class PaymentsRabbitTemplate {
     private RabbitTemplate rabbitTemplate;
 
     public void sendPaymentsCreated(PaymentDto payment){
-        rabbitTemplate.convertAndSend("payments.created.ex", "", payment);
+        rabbitTemplate.convertAndSend("payments.created.dx", "alura-food.payments-ms.payments-created.orders-ms", payment);
     }
 
     public void sendPaymentsConfirmed(PaymentDto payment){
-        rabbitTemplate.convertAndSend("payments.confirmed.ex", "", payment);
+        rabbitTemplate.convertAndSend("payments.confirmed.fx", "", payment);
     }
 
 }
