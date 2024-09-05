@@ -3,7 +3,7 @@ package br.com.alurafood.payments.service;
 import br.com.alurafood.payments.dto.PaymentDto;
 import br.com.alurafood.payments.model.Payment;
 import br.com.alurafood.payments.model.PaymentStatus;
-import br.com.alurafood.payments.rabbitmq.PaymentsRabbitTemplate;
+import br.com.alurafood.payments.rabbitmq.PaymentRabbitTemplate;
 import br.com.alurafood.payments.repository.PaymentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +25,7 @@ public class PaymentService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private PaymentsRabbitTemplate paymentsRabbitTemplate;
+    private PaymentRabbitTemplate paymentsRabbitTemplate;
 
     public Page<PaymentDto> findAllByPage (Pageable pageable){
         return paymentRepository
